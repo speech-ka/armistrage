@@ -1,0 +1,15 @@
+name = "armistrage"
+description = ""
+version = "0.1.0-dev"
+
+authors = ["speech-ka"]
+maintainers = ["speech-ka <speech-ka@tutamail.com>"]
+licenses = "custom-I-Own-Everything"
+website = ""
+tags = []
+
+[[depends-on]]
+asfml = "^2.6.1"
+
+[[depends-on]]
+libcsfml = "^2.6.1"

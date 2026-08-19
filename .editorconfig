@@ -1,0 +1,3 @@
+[*.{ada,adb,ads,gpr}]
+indent_style = space
+indent_size = 3

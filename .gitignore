@@ -1,0 +1,10 @@
+/obj/
+/bin/
+/alire/
+/config/
+
+/.vscode/
+
+*.png
+*.ogg
+*.ttf
