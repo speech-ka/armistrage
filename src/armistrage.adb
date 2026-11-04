@@ -1,5 +1,3 @@
-with Ada.Command_Line;
-
 with Sf.Window.VideoMode;
 use Sf, Sf.Window, Sf.Window.VideoMode;
 with Sf.Window.Event;  use Sf.Window.Event;
@@ -22,20 +20,17 @@ with Sf.System.Time;  use Sf.System.Time;
 
 with Ada.Text_IO;
 
-with Abilities;
-
 procedure Armistrage is
 
    Resource_Unavailable : exception;
 
-   Mode    : VideoMode.sfVideoMode :=
+   Mode    : constant VideoMode.sfVideoMode :=
      (width => 800, height => 600, bitsPerPixel => 32);
    Window  : sfRenderWindow_Ptr;
    Texture : sfTexture_Ptr;
    Sprite  : sfSprite_Ptr;
    Font    : sfFont_Ptr;
    Text    : sfText_Ptr;
-   Music   : sfMusic_Ptr;
    event   : sfEvent;
 
    Game_Clock     : sfClock_Ptr := Clock.create;
@@ -62,12 +57,13 @@ procedure Armistrage is
 
       display (Window);
       Ada.Text_IO.Put_Line
-        ("update dt: " & sfTime'Image (Dt) & Float'Image (Alpha));
+        ("update dt: "
+         & sfInt64'Image (Dt.microseconds)
+         & Float'Image (Alpha));
    end Update;
 
 begin
    Window := create (Mode, "SFML window");
-   setFramerateLimit (Window, 60);
 
    Texture := createFromFile ("./ASFML_Logo.png");
 
@@ -103,18 +99,15 @@ begin
       end if;
       Acc.microseconds := Acc.microseconds + Dt.microseconds;
       Updates := 0;
-      while Acc.microseconds >= Fixed_Dt loop
+      while Acc.microseconds >= Fixed_Dt and then Updates < Max_Updates loop
          UpdateFixed;
-         Updates := Updates + 1;
-         if Updates >= Max_Updates then
-            Acc.microseconds :=
-              sfInt64
-                (Integer'Min
-                   (Integer (Acc.microseconds),
-                    Integer (Fixed_Dt) * Max_Updates));
-         end if;
          Acc.microseconds := Acc.microseconds - Fixed_Dt;
+         Updates := Updates + 1;
       end loop;
+
+      if Acc.microseconds >= Fixed_Dt then
+         Acc.microseconds := Acc.microseconds mod Fixed_Dt;
+      end if;
 
       Alpha := Float (Acc.microseconds) / Float (Fixed_Dt);
 
