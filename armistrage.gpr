@@ -8,8 +8,13 @@ project Armistrage is
    for Main use ("armistrage.adb");
 
    package Compiler is
-      for Default_Switches ("Ada") use Armistrage_Config.Ada_Compiler_Switches & ("-gnat2022");
+      for Default_Switches ("Ada") use Armistrage_Config.Ada_Compiler_Switches &
+      ("-gnat2022", "-g", "-gnatwa", "-gnatVa");
    end Compiler;
+
+   package Builder is
+      for Switches ("Ada") use ("-j0");
+   end Builder;
 
    package Binder is
       for Switches ("Ada") use ("-Es"); --  Symbolic traceback
