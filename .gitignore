@@ -3,7 +3,12 @@
 /alire/
 /config/
 
-/.vscode/
+*.o
+*.ali
+
+.vscode
+.zed
+.idea
 
 *.png
 *.ogg
